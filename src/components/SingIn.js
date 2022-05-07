@@ -7,7 +7,7 @@ export default function SingIn() {
         email: '',
         password: ''
     })
-    const [load, setLoad] = useState(false);
+    const [load, setLoad] = useState(true);
 
     return !load ? (
         <Main>
@@ -22,7 +22,24 @@ export default function SingIn() {
             </Link>
         </Main>
     ) : (
-        <p>oiioii</p>
+        <Main>
+        <H1>MyWallet</H1>
+        <Form>
+            <input type='text' placeholder='E-mail' onChange={e => setUserInfos({ ...userInfos, email: e.target.value })}></input>
+            <input type='password' placeholder='Senha' onChange={e => setUserInfos({ ...userInfos, password: e.target.value })}></input>
+            <Button>
+                <DivLoading>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </DivLoading>
+            </Button>
+        </Form>
+        <Link to="/">
+            <p>Já tem uma conta? Entre agora!</p>
+        </Link>
+    </Main>
     )
 
 }
@@ -88,8 +105,8 @@ button {
     width: 326px;
     height: 46px;
     color: #FFFFFF;
-    background: #52B6FF;
-    border-radius: 4.63636px;
+    background: #A328D6;
+    border-radius: 5px;
     border: 1px solid #8C11BE;
     font-family: 'Raleway';
     font-style: normal;
@@ -99,4 +116,68 @@ button {
     text-align: center;
     color: #FFFFFF;
 }
+`
+
+const DivLoading = styled.div`
+display: inline-block;
+position: relative;
+width: 80px;
+height: 80px;
+ 
+div {
+    position: absolute;
+    top: 14px;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: #cef;
+    animation-timing-function: cubic-bezier(0, 1, 1, 0);
+  }
+div:nth-child(1) {
+    left: 8px;
+    animation: lds-ellipsis1 0.6s infinite;
+  }
+div:nth-child(2) {
+    left: 8px;
+    animation: lds-ellipsis2 0.6s infinite;
+  }
+div:nth-child(3) {
+    left: 32px;
+    animation: lds-ellipsis2 0.6s infinite;
+  }
+div:nth-child(4) {
+    left: 56px;
+    animation: lds-ellipsis3 0.6s infinite;
+  }
+  @keyframes lds-ellipsis1 {
+    0% {
+      transform: scale(0);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  @keyframes lds-ellipsis3 {
+    0% {
+      transform: scale(1);
+    }
+    100% {
+      transform: scale(0);
+    }
+  }
+  @keyframes lds-ellipsis2 {
+    0% {
+      transform: translate(0, 0);
+    }
+    100% {
+      transform: translate(24px, 0);
+    }
+  }
+`
+const Button = styled.button`
+width: 326px;
+height: 46px;
+background: #A328D6;
+border-radius: 5px;
+border: 1px solid #8C11BE;
 `
