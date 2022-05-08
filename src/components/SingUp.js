@@ -1,51 +1,72 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 
 export default function SingUp() {
-    const [userInfos, setUserInfos] = useState({
-        nome: '',
-        email: '',
-        password: '',
-        passwordConfirmation: ''
-    })
-    const [load, setLoad] = useState(true);
-    return !load ? (
-        <Section>
-            <H1>MyWallet</H1>
-            <Form>
-                <input type='text' placeholder='Nome' onChange={e => setUserInfos({ ...userInfos, nome: e.target.value })}></input>
-                <input type='text' placeholder='E-mail' onChange={e => setUserInfos({ ...userInfos, email: e.target.value })}></input>
-                <input type='password' placeholder='Senha' onChange={e => setUserInfos({ ...userInfos, password: e.target.value })}></input>
-                <input type='password' placeholder='Confirme a senha' onChange={e => setUserInfos({ ...userInfos, passwordConfirmation: e.target.value })}></input>
-                <button>Cadastrar</button>
-            </Form>
-            <Link to="/">
-                <p>Já tem uma conta? Entre agora!</p>
-            </Link>
-        </Section>
-    ) : (
-        <Section>
-            <H1>MyWallet</H1>
-            <Form>
-                <input type='text' placeholder='Nome' onChange={e => setUserInfos({ ...userInfos, nome: e.target.value })}></input>
-                <input type='text' placeholder='E-mail' onChange={e => setUserInfos({ ...userInfos, email: e.target.value })}></input>
-                <input type='password' placeholder='Senha' onChange={e => setUserInfos({ ...userInfos, password: e.target.value })}></input>
-                <input type='password' placeholder='Confirme a senha' onChange={e => setUserInfos({ ...userInfos, passwordConfirmation: e.target.value })}></input>
-                <Button>
-                    <DivLoading>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                    </DivLoading>
-                </Button>
-            </Form>
-            <Link to="/">
-                <p>Já tem uma conta? Entre agora!</p>
-            </Link>
-        </Section>
-    )
+  const [userInfos, setUserInfos] = useState({
+    name: '',
+    email: '',
+    password: '',
+    passwordConfirmation: ''
+  })
+  const [load, setLoad] = useState(false);
+  const navigate = useNavigate();
+  
+  function register(event) {
+    event.preventDefault();
+    setLoad(true);
+    const promisse = axios.post("http://localhost:5000/register", userInfos);
+    promisse.then(response => {
+      const { data } = response;
+      console.log(data);
+      setLoad(false);
+      navigate("/");
+    });
+    promisse.catch(() => {
+      setLoad(false);
+      warning();
+  })
+  }
+
+  function warning() {
+    alert('Não foi possível executar a ação');
+  }
+
+  return !load ? (
+    <Section>
+      <H1>MyWallet</H1>
+      <Form onSubmit={register}>
+        <input type='text' placeholder='Nome' onChange={e => setUserInfos({ ...userInfos, nome: e.target.value })}></input>
+        <input type='text' placeholder='E-mail' onChange={e => setUserInfos({ ...userInfos, email: e.target.value })}></input>
+        <input type='password' placeholder='Senha' onChange={e => setUserInfos({ ...userInfos, password: e.target.value })}></input>
+        <input type='password' placeholder='Confirme a senha' onChange={e => setUserInfos({ ...userInfos, passwordConfirmation: e.target.value })}></input>
+      <button type="submit">Cadastrar</button>
+      </Form>
+      <Link to="/">
+        <p>Já tem uma conta? Entre agora!</p>
+      </Link>
+    </Section>
+  ) : (
+    <Section>
+      <H1>MyWallet</H1>
+      <Form>
+        <input type='text' placeholder='Nome' onChange={e => setUserInfos({ ...userInfos, nome: e.target.value })}></input>
+        <input type='text' placeholder='E-mail' onChange={e => setUserInfos({ ...userInfos, email: e.target.value })}></input>
+        <input type='password' placeholder='Senha' onChange={e => setUserInfos({ ...userInfos, password: e.target.value })}></input>
+        <input type='password' placeholder='Confirme a senha' onChange={e => setUserInfos({ ...userInfos, passwordConfirmation: e.target.value })}></input>
+        <Button>
+          <DivLoading>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </DivLoading>
+        </Button>
+      </Form>
+      <p>Já tem uma conta? Entre agora!</p>
+    </Section>
+  )
 
 }
 
@@ -60,7 +81,7 @@ p {
     font-weight: 700;
     font-size: 15px;
     line-height: 18px;
-    margin-top: 36px;
+    margin-top: 32px;
     color: #FFFFFF;
 }
 `
@@ -179,6 +200,7 @@ div:nth-child(4) {
     }
   }
 `
+
 const Button = styled.button`
 width: 326px;
 height: 46px;

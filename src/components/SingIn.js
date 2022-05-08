@@ -1,21 +1,45 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from 'react';
+import { useToken } from "../context/Token";
 import styled from 'styled-components';
+import axios from 'axios';
 
 export default function SingIn() {
     const [userInfos, setUserInfos] = useState({
         email: '',
         password: ''
     })
-    const [load, setLoad] = useState(true);
+    const [load, setLoad] = useState(false);
+    const { setToken } = useToken();
+    const navigate = useNavigate();
 
+    function login(event) {
+      event.preventDefault(); 
+      setLoad(true);
+      const promisse = axios.post("http://localhost:5000/login", userInfos);
+      promisse.then(response => {
+          const { data } = response;
+          console.log(data);
+          setToken(data.token);
+          navigate("/wallet");
+          setLoad(false);
+      })
+      promisse.catch(() => {
+          setLoad(false);
+          warning()
+      })
+  }
+
+  function warning() {
+      alert('Não foi possível fazer o login');
+  }
     return !load ? (
         <Main>
             <H1>MyWallet</H1>
-            <Form>
+            <Form onSubmit={login}>
                 <input type='text' placeholder='E-mail' onChange={e => setUserInfos({ ...userInfos, email: e.target.value })}></input>
                 <input type='password' placeholder='Senha' onChange={e => setUserInfos({ ...userInfos, password: e.target.value })}></input>
-                <button>Entrar</button>
+                <button type='submit'>Entrar</button>
             </Form>
             <Link to="/singup">
                 <p>Primeira vez? Cadastre-se!</p>
@@ -23,23 +47,21 @@ export default function SingIn() {
         </Main>
     ) : (
         <Main>
-        <H1>MyWallet</H1>
-        <Form>
-            <input type='text' placeholder='E-mail' onChange={e => setUserInfos({ ...userInfos, email: e.target.value })}></input>
-            <input type='password' placeholder='Senha' onChange={e => setUserInfos({ ...userInfos, password: e.target.value })}></input>
-            <Button>
-                <DivLoading>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                </DivLoading>
-            </Button>
-        </Form>
-        <Link to="/">
+            <H1>MyWallet</H1>
+            <Form>
+                <input type='text' placeholder='E-mail' onChange={e => setUserInfos({ ...userInfos, email: e.target.value })}></input>
+                <input type='password' placeholder='Senha' onChange={e => setUserInfos({ ...userInfos, password: e.target.value })}></input>
+                <Button>
+                    <DivLoading>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </DivLoading>
+                </Button>
+            </Form>
             <p>Já tem uma conta? Entre agora!</p>
-        </Link>
-    </Main>
+        </Main>
     )
 
 }
@@ -174,6 +196,7 @@ div:nth-child(4) {
     }
   }
 `
+
 const Button = styled.button`
 width: 326px;
 height: 46px;
