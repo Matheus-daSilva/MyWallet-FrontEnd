@@ -9,8 +9,9 @@ import axios from 'axios';
 
 export default function Wallet() {
     const { token } = useToken();
+    const navigate = useNavigate();
     const [items, setItems] = useState([]);
-    const [controler, setControler] = useState(1)
+    const [controler, setControler] = useState(0)
     const [value, setValue] = useState({
         cash: '',
         cescription: ''
@@ -25,7 +26,7 @@ export default function Wallet() {
         const request = axios.get("http://localhost:5000/wallet", config);
         request.then(response => {
             const { data } = response;
-            setItems(data)
+            setItems(data);
         });
         request.catch(warning);
     }, [])
@@ -34,12 +35,21 @@ export default function Wallet() {
         alert("Não foi possível fazer essa requisição");
     }
 
-    if (controler === 0) {
+    function logOut() {
+        const promisse = axios.delete("http://localhost:5000/wallet", {token});
+        promisse.then(response => {
+            setControler(0);
+            navigate("/wallet");
+        });
+        promisse.catch(warning);
+    }
+
+    if (items.length === 0 && controler === 0) {
         return (
             <Section>
                 <Header>
                     <p>Olá, ${ }</p>
-                    <img src={singout} alt="botão de saida"></img>
+                    <img src={singout} alt="botão de saida" onClick={() => logOut()}></img>
                 </Header>
                 <Notes>
                     <p>Não há registros de entrada ou saída</p>
