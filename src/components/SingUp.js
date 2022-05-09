@@ -37,7 +37,7 @@ export default function SingUp() {
     <Section>
       <H1>MyWallet</H1>
       <Form onSubmit={register}>
-        <input type='text' placeholder='Nome' onChange={e => setUserInfos({ ...userInfos, nome: e.target.value })}></input>
+        <input type='text' placeholder='Nome' onChange={e => setUserInfos({ ...userInfos, name: e.target.value })}></input>
         <input type='text' placeholder='E-mail' onChange={e => setUserInfos({ ...userInfos, email: e.target.value })}></input>
         <input type='password' placeholder='Senha' onChange={e => setUserInfos({ ...userInfos, password: e.target.value })}></input>
         <input type='password' placeholder='Confirme a senha' onChange={e => setUserInfos({ ...userInfos, passwordConfirmation: e.target.value })}></input>
