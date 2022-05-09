@@ -132,7 +132,7 @@ button {
     height: 46px;
     color: #FFFFFF;
     background: #A328D6;
-    border-radius: 4.63636px;
+    border-radius: 5px;
     border: 1px solid #8C11BE;
     font-family: 'Raleway';
     font-style: normal;
